@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
 import '../services/app_settings_service.dart';
+import '../services/audio_service.dart';
 import '../localization/app_strings.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -229,7 +230,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         title: AppStrings.tr('sfxTitle'),
                         subtitle: AppStrings.tr('sfxDesc'),
                         value: settings.sfxEnabled,
-                        onChanged: (v) => settings.setSfxEnabled(v),
+                        onChanged: (v) {
+                          settings.setSfxEnabled(v);
+                          if (v) AudioService().playPop();
+                        },
                       ),
                       const SizedBox(height: 10),
 
@@ -241,7 +245,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         title: AppStrings.tr('musicTitle'),
                         subtitle: AppStrings.tr('musicDesc'),
                         value: settings.musicEnabled,
-                        onChanged: (v) => settings.setMusicEnabled(v),
+                        onChanged: (v) {
+                          settings.setMusicEnabled(v);
+                          if (v) AudioService().playPop();
+                        },
                       ),
                       const SizedBox(height: 10),
 
@@ -253,7 +260,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         title: AppStrings.tr('voiceTitle'),
                         subtitle: AppStrings.tr('voiceDesc'),
                         value: settings.voiceEnabled,
-                        onChanged: (v) => settings.setVoiceEnabled(v),
+                        onChanged: (v) {
+                          settings.setVoiceEnabled(v);
+                          if (v) AudioService().playVoicePraise();
+                        },
                       ),
                       const SizedBox(height: 16),
 
@@ -570,7 +580,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget _buildLangCard(String flag, String name, String sub, String code, String currentLang) {
     final isSelected = currentLang == code;
     return GestureDetector(
-      onTap: () => AppSettingsService().setSelectedLanguage(code),
+      onTap: () {
+        AudioService().playPop();
+        AppSettingsService().setSelectedLanguage(code);
+      },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         decoration: BoxDecoration(
@@ -610,6 +623,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return ElevatedButton(
       onPressed: () {
         if (isCorrect) {
+          AudioService().playFanfare();
           AppSettingsService().setParentUnlocked(true);
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -618,6 +632,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
           );
         } else {
+          AudioService().playUndo();
           setState(() {
             _generateMathChallenge();
           });
@@ -644,7 +659,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final isSelected = settings.timeLimit == value;
     return Expanded(
       child: GestureDetector(
-        onTap: () => settings.setTimeLimit(value),
+        onTap: () {
+          AudioService().playTap();
+          settings.setTimeLimit(value);
+        },
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 8),
           decoration: BoxDecoration(

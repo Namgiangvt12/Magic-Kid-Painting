@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../localization/app_strings.dart';
 import '../services/app_settings_service.dart';
+import '../services/audio_service.dart';
 import '../theme/app_colors.dart';
 import 'choose_theme_screen.dart';
 
@@ -197,6 +198,7 @@ class HomeScreen extends StatelessWidget {
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: () {
+                            AudioService().playPop();
                             Navigator.push(
                               context,
                               MaterialPageRoute(builder: (context) => const ChooseThemeScreen()),
@@ -253,6 +255,7 @@ class HomeScreen extends StatelessWidget {
                 // Featured Artwork Card
                 InkWell(
                   onTap: () {
+                    AudioService().playPop();
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => const ChooseThemeScreen()),

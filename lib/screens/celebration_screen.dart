@@ -1,10 +1,29 @@
 import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
 import '../localization/app_strings.dart';
+import '../services/audio_service.dart';
 import 'kids_gallery_screen.dart';
 
-class CelebrationScreen extends StatelessWidget {
+class CelebrationScreen extends StatefulWidget {
   const CelebrationScreen({super.key});
+
+  @override
+  State<CelebrationScreen> createState() => _CelebrationScreenState();
+}
+
+class _CelebrationScreenState extends State<CelebrationScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      AudioService().playFanfare();
+      Future.delayed(const Duration(milliseconds: 2200), () {
+        if (mounted) {
+          AudioService().playVoicePraise();
+        }
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -330,6 +349,7 @@ class CelebrationScreen extends StatelessWidget {
                   height: 56,
                   child: ElevatedButton.icon(
                     onPressed: () {
+                      AudioService().playSave();
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(AppStrings.tr('savedToDevice')),
@@ -359,6 +379,7 @@ class CelebrationScreen extends StatelessWidget {
                   height: 56,
                   child: ElevatedButton.icon(
                     onPressed: () {
+                      AudioService().playPop();
                       Navigator.pop(context);
                     },
                     icon: const Icon(Icons.auto_fix_high),
@@ -384,6 +405,7 @@ class CelebrationScreen extends StatelessWidget {
                         height: 52,
                         child: ElevatedButton.icon(
                           onPressed: () {
+                            AudioService().playPop();
                             Navigator.push(
                               context,
                               MaterialPageRoute(builder: (_) => const KidsGalleryScreen()),
@@ -409,6 +431,7 @@ class CelebrationScreen extends StatelessWidget {
                         height: 52,
                         child: OutlinedButton.icon(
                           onPressed: () {
+                            AudioService().playPop();
                             // Pop back to root/home
                             Navigator.of(context).popUntil((route) => route.isFirst);
                           },

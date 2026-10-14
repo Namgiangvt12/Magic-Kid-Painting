@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
 import '../services/app_settings_service.dart';
+import '../services/audio_service.dart';
 import '../localization/app_strings.dart';
 import 'coloring_board_screen.dart';
 
@@ -469,6 +470,7 @@ class _KidsGalleryScreenState extends State<KidsGalleryScreen> {
                                   height: 36,
                                   child: ElevatedButton(
                                     onPressed: () {
+                                      AudioService().playPop();
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -536,6 +538,7 @@ class _KidsGalleryScreenState extends State<KidsGalleryScreen> {
   }) {
     return GestureDetector(
       onTap: () {
+        AudioService().playPop();
         setState(() {
           _selectedFilter = id;
         });

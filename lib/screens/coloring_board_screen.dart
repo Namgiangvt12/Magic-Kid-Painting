@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:image/image.dart' as img;
 import '../theme/app_colors.dart';
 import '../services/app_settings_service.dart';
+import '../services/audio_service.dart';
 import '../localization/app_strings.dart';
 import 'celebration_screen.dart';
 
@@ -231,6 +232,7 @@ class _ColoringBoardScreenState extends State<ColoringBoardScreen> {
   }
 
   void _onSizeSelected(String size) {
+    AudioService().playTap();
     setState(() {
       _brushSize = size;
       if (size == 'small') {
@@ -285,6 +287,7 @@ class _ColoringBoardScreenState extends State<ColoringBoardScreen> {
 
     // If tapped on a bucket-filled region or outside in a colored background, clear the region!
     if (targetColor != 0 || (tappedOutside && _canvasBgColor != Colors.white)) {
+      AudioService().playEraser();
       final strokesBefore = _strokes.map((s) => s.clone()).toList();
       final clearedMap = <int, int>{};
 
@@ -491,12 +494,14 @@ class _ColoringBoardScreenState extends State<ColoringBoardScreen> {
     }
 
     if (anyStrokeChanged || anyFillChanged) {
+      AudioService().playEraser();
       setState(() {});
     }
   }
 
   void _undo() async {
     if (_history.isEmpty) return;
+    AudioService().playUndo();
 
     final action = _history.removeLast();
     _redoHistory.add(action);
@@ -551,6 +556,7 @@ class _ColoringBoardScreenState extends State<ColoringBoardScreen> {
 
   void _redo() async {
     if (_redoHistory.isEmpty) return;
+    AudioService().playRedo();
 
     final action = _redoHistory.removeLast();
     _history.add(action);
@@ -602,6 +608,7 @@ class _ColoringBoardScreenState extends State<ColoringBoardScreen> {
   }
 
   void _saveArt() {
+    AudioService().playSave();
     AppSettingsService().addStars(1);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -894,6 +901,7 @@ class _ColoringBoardScreenState extends State<ColoringBoardScreen> {
     }
 
     await _updateFillImage();
+    AudioService().playBucketFill();
 
     final action = FillAction(
       indices: Int32List.fromList(changedIndices),
@@ -1030,6 +1038,7 @@ class _ColoringBoardScreenState extends State<ColoringBoardScreen> {
                       color: settings.musicEnabled ? AppColors.secondaryDark : Colors.grey,
                     ),
                     onPressed: () {
+                      AudioService().playTap();
                       settings.setMusicEnabled(!settings.musicEnabled);
                       setState(() {});
                     },
@@ -1038,6 +1047,7 @@ class _ColoringBoardScreenState extends State<ColoringBoardScreen> {
                 const SizedBox(width: 8),
                 ElevatedButton.icon(
                   onPressed: () {
+                    AudioService().playFanfare();
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -1158,6 +1168,7 @@ class _ColoringBoardScreenState extends State<ColoringBoardScreen> {
                                     } else if (_activeTool == 'eraser') {
                                       _handleEraserTap(details.localPosition, canvasSize);
                                     } else {
+                                      AudioService().playBrushStroke();
                                       final stroke = DrawingStroke(
                                         points: [details.localPosition],
                                         color: _currentColor,
@@ -1176,6 +1187,7 @@ class _ColoringBoardScreenState extends State<ColoringBoardScreen> {
                                       _erasedPixelsInDrag.clear();
                                       _eraseAt(details.localPosition, canvasSize);
                                     } else if (_activeTool == 'brush') {
+                                      AudioService().playBrushStroke();
                                       final stroke = DrawingStroke(
                                         points: [details.localPosition],
                                         color: _currentColor,
@@ -1192,6 +1204,7 @@ class _ColoringBoardScreenState extends State<ColoringBoardScreen> {
                                     if (_activeTool == 'eraser') {
                                       _eraseAt(details.localPosition, canvasSize);
                                     } else if (_activeTool == 'brush' && _strokes.isNotEmpty) {
+                                      AudioService().playBrushStroke();
                                       setState(() {
                                         _strokes.last.points.add(details.localPosition);
                                       });
@@ -1320,6 +1333,7 @@ class _ColoringBoardScreenState extends State<ColoringBoardScreen> {
                       final itemColor = _palette[index]['color'] as Color;
                       return GestureDetector(
                         onTap: () {
+                          AudioService().playColorSelect();
                           setState(() {
                             _activeColorIndex = index;
                             if (_activeTool == 'eraser') {
@@ -1368,6 +1382,7 @@ class _ColoringBoardScreenState extends State<ColoringBoardScreen> {
     final isActive = _activeTool == id;
     return GestureDetector(
       onTap: () {
+        AudioService().playPop();
         setState(() {
           _activeTool = id;
         });

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../localization/app_strings.dart';
 import '../services/app_settings_service.dart';
+import '../services/audio_service.dart';
 import 'home_screen.dart';
 import 'choose_theme_screen.dart';
 import 'ai_magic_screen.dart';
@@ -38,6 +39,9 @@ class _AppNavigatorState extends State<AppNavigator> {
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: _currentIndex,
             onTap: (index) {
+              if (_currentIndex != index) {
+                AudioService().playPop();
+              }
               setState(() {
                 _currentIndex = index;
               });

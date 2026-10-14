@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import '../theme/app_colors.dart';
 import '../services/app_settings_service.dart';
+import '../services/audio_service.dart';
 import '../localization/app_strings.dart';
 import 'coloring_board_screen.dart';
 
@@ -17,6 +18,7 @@ class _AiMagicScreenState extends State<AiMagicScreen> {
   final ImagePicker _picker = ImagePicker();
 
   Future<void> _pickImage(ImageSource source) async {
+    AudioService().playPop();
     try {
       final XFile? photo = await _picker.pickImage(
         source: source,
@@ -28,6 +30,7 @@ class _AiMagicScreenState extends State<AiMagicScreen> {
       if (!mounted) return;
 
       if (photo != null) {
+        AudioService().playSparkle();
         final settings = AppSettingsService();
         final hasTurn = await settings.useAiTurn();
 
@@ -64,6 +67,7 @@ class _AiMagicScreenState extends State<AiMagicScreen> {
   }
 
   void _watchAdForTurn() {
+    AudioService().playSparkle();
     AppSettingsService().addAiTurn(1);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -379,6 +383,7 @@ class _AiMagicScreenState extends State<AiMagicScreen> {
                         width: double.infinity,
                         child: ElevatedButton.icon(
                           onPressed: () {
+                            AudioService().playPop();
                             Navigator.push(
                               context,
                               MaterialPageRoute(builder: (context) => const ColoringBoardScreen()),

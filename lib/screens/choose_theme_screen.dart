@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
 import '../services/app_settings_service.dart';
+import '../services/audio_service.dart';
 import '../localization/app_strings.dart';
 import 'coloring_board_screen.dart';
 
@@ -623,6 +624,7 @@ class _ChooseThemeScreenState extends State<ChooseThemeScreen> {
                               padding: const EdgeInsets.only(right: 8.0),
                               child: GestureDetector(
                                 onTap: () {
+                                  AudioService().playPop();
                                   setState(() {
                                     _selectedCategory = cat['id'] as String;
                                   });
@@ -816,6 +818,7 @@ class _ChooseThemeScreenState extends State<ChooseThemeScreen> {
                       ),
                       ElevatedButton(
                         onPressed: () {
+                          AudioService().playSparkle();
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text('✨ ${AppStrings.tr('turnReceived')}'),
@@ -972,6 +975,7 @@ class _ChooseThemeScreenState extends State<ChooseThemeScreen> {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
+                      AudioService().playPop();
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => const ColoringBoardScreen()),

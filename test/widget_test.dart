@@ -4,11 +4,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:stitch_color_app/main.dart';
 import 'package:stitch_color_app/services/app_settings_service.dart';
+import 'package:stitch_color_app/services/audio_service.dart';
 
 void main() {
   testWidgets('App navigation and tabs smoke test', (WidgetTester tester) async {
     SharedPreferences.setMockInitialValues({});
+    AudioService.testMode = true;
     await AppSettingsService().init();
+    await AudioService().init();
 
     // Build our app and trigger a frame.
     await tester.pumpWidget(const MyApp());
